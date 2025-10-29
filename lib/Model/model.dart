@@ -42,6 +42,8 @@ class Event {
       'eventTime': eventTime,
       'isFavorite': isFavorite,
       //add to githup
+      //creat new branch from development
+      //conflict
     };
   }
 }
