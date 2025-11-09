@@ -30,8 +30,8 @@ class FirebaseUtiles {
         .collection(Event.collectionName)
         .withConverter<Event>(
           fromFirestore: (snapshot, options) =>
-              Event.formFirstStore(snapshot.data()!),
-          toFirestore: (event, options) => event.toFIreStore(),
+              Event.fromFirestore(snapshot.data()!),
+          toFirestore: (event, options) => event.toFirestore(),
         );
   }
 }

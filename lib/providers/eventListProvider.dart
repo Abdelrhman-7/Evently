@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evently/Model/model.dart';
+import 'package:evently/core/colormanager.dart';
 import 'package:evently/firebase/firebaseinfo.dart';
 import 'package:evently/l10n/app_localizations.dart';
+import 'package:evently/utils/tost_utils.dart';
 import 'package:flutter/material.dart';
 
 class Eventlistprovider extends ChangeNotifier {
@@ -57,5 +59,35 @@ class Eventlistprovider extends ChangeNotifier {
     } else {
       getFilterEvents();
     }
+  }
+
+  void updateIsFavoriteEvent(Event event) {
+    FirebaseUtiles.getEventCollection()
+        .doc(event.id)
+        .update({'isFavorite': event.isFavorite})
+        .then((_) {
+          ToastUtils.showToastMsg(
+            message: event.isFavorite == true
+                ? "Added to Favorites "
+                : "Removed from Favorites ",
+            backgroundColor: Colormanager.blue,
+            textColor: Colormanager.white,
+          );
+        })
+        .catchError((error) {
+          ToastUtils.showToastMsg(
+            message: "Failed to update event: $error",
+            backgroundColor: Colormanager.red,
+            textColor: Colormanager.white,
+          );
+        });
+
+    int index = eventList.indexWhere((e) => e.id == event.id);
+    if (index != -1) {
+      eventList[index].isFavorite = event.isFavorite;
+    }
+
+    selectedIndex == 0 ? getAllEvents() : getFilterEvents();
+    notifyListeners();
   }
 }

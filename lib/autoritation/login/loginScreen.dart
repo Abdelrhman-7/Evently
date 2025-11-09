@@ -5,6 +5,8 @@ import 'package:evently/core/Icon.dart';
 import 'package:evently/core/assetsmanager.dart';
 import 'package:evently/core/colormanager.dart';
 import 'package:evently/l10n/app_localizations.dart';
+import 'package:evently/utils/dialog_utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -222,9 +224,52 @@ class Loginscreen extends StatelessWidget {
     );
   }
 
-  void login(BuildContext context) {
+  void login(BuildContext context) async {
     if (forKey.currentState?.validate() == true) {
-      Navigator.of(context).pushReplacementNamed(RoutManager.homescreen);
+      DialogUtils.showLoading(context: context, message: "Loding");
+      try {
+        final credential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+              email: emailController.text.trim(),
+              password: passowrdController.text.trim(),
+            );
+
+        final user = credential.user;
+        if (user == null) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text("User not found.")));
+          return;
+        }
+
+        // تحقق من وجود المستند في Firestore لو تحب
+        // final doc = await FirebaseFirestore.instance
+        //     .collection('users')
+        //     .doc(user.uid)
+        //     .get();
+        // if (!doc.exists) {
+        //   ScaffoldMessenger.of(context).showSnackBar(
+        //     SnackBar(content: Text("User not found in database.")),
+        //   );
+        //   await FirebaseAuth.instance.signOut();
+        //   return;
+        // }
+
+        Navigator.of(context).pushReplacementNamed(RoutManager.homescreen);
+      } on FirebaseAuthException catch (e) {
+        String message = "";
+        if (e.code == 'user-not-found') {
+          message = 'No user found for that email.';
+        } else if (e.code == 'wrong-password') {
+          message = 'Wrong password provided for that user.';
+        } else {
+          message = 'Login failed: ${e.message}';
+        }
+
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(message)));
+      }
     }
   }
 }

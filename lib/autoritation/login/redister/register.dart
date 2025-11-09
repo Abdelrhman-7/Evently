@@ -4,6 +4,8 @@ import 'package:evently/Routmanager/routesmanager.dart';
 import 'package:evently/core/Icon.dart';
 import 'package:evently/core/assetsmanager.dart';
 import 'package:evently/l10n/app_localizations.dart';
+import 'package:evently/utils/dialog_utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -213,9 +215,60 @@ class Register extends StatelessWidget {
     );
   }
 
-  void register(BuildContext context) {
+  void register(BuildContext context) async {
+    //1-showe loding
     if (formKey.currentState?.validate() == true) {
-      Navigator.of(context).pushReplacementNamed(RoutManager.loginScreen);
+      DialogUtils.showLoading(context: context, message: "Wating...");
+
+      try {
+        final credential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+              email: emailController.text.trim(),
+              password: passowrdController.text.trim(),
+            );
+        //2-hide loding
+        DialogUtils.hideLoding(context: context);
+        //3-show messege
+        DialogUtils.showMasseg(
+          context: context,
+          message: "Register Successfully",
+        );
+
+        final user = credential.user;
+        if (user != null) {
+          // ممكن تضيف مستند في Firestore هنا
+          // await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+          //   'name': name.text.trim(),
+          //   'email': emailController.text.trim(),
+          //   'createdAt': FieldValue.serverTimestamp(),
+          // });
+
+          // لو التسجيل نجح فقط هتروح للـ login
+
+          //2-hid messege
+          DialogUtils.hideLoding(context: context);
+          //3-show message
+          // DialogUtils.showLoading(context: context, message: message)
+          Navigator.of(context).pushReplacementNamed(RoutManager.loginScreen);
+        }
+      } on FirebaseAuthException catch (e) {
+        String message = "";
+        if (e.code == 'weak-password') {
+          message = 'The password provided is too weak.';
+        } else if (e.code == 'email-already-in-use') {
+          message = 'The account exists for that email.';
+        } else {
+          message = e.message ?? "Registration failed.";
+        }
+
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(message)));
+      } catch (e) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Error: $e")));
+      }
     }
   }
 }

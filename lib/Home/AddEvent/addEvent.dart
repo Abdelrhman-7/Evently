@@ -3,6 +3,7 @@ import 'package:evently/Custome_text_filed/text_filed.dart';
 import 'package:evently/Home/Tabs/widget/TimeWidget/timewidget.dart';
 import 'package:evently/Home/Tabs/widget/event_tab_item.dart';
 import 'package:evently/Model/model.dart';
+import 'package:evently/Routmanager/routesmanager.dart';
 import 'package:evently/core/Icon.dart';
 import 'package:evently/core/assetsmanager.dart';
 import 'package:evently/core/colormanager.dart';
@@ -336,7 +337,8 @@ class _AddeventState extends State<Addevent> {
           print("add event");
           //  eventListProvider.getAllEvents();
           // ignore: use_build_context_synchronously
-          Navigator.pop(context);
+          //  Navigator.pop(context);
+          Navigator.of(context).pushReplacementNamed(RoutManager.homescreen);
         },
       );
     }
