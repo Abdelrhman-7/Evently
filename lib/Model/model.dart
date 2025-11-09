@@ -52,6 +52,7 @@ class Event {
           : null,
       'eventTime': eventTime,
       'isFavorite': isFavorite,
+
     };
   }
 }
