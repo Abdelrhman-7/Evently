@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+//import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evently/Apptheam/apptheam.dart';
 import 'package:evently/Home/AddEvent/addEvent.dart';
 import 'package:evently/Home/Tabs/widget/forgetPassword/forgetPassword.dart';
@@ -19,7 +19,7 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await FirebaseFirestore.instance.disableNetwork(); //offline
+  //await FirebaseFirestore.instance.disableNetwork(); //offline
   runApp(
     MultiProvider(
       providers: [
@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
         RoutManager.addevent: (context) => Addevent(),
         RoutManager.splashscreen: (context) => Splashscreen(),
       },
-      initialRoute: RoutManager.homescreen,
+      initialRoute: RoutManager.loginScreen,
       locale: Locale(languageProvider.appLanguage),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
