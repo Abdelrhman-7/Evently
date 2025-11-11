@@ -3,13 +3,13 @@ import 'package:evently/Custome_text_filed/text_filed.dart';
 import 'package:evently/Home/Tabs/widget/TimeWidget/timewidget.dart';
 import 'package:evently/Home/Tabs/widget/event_tab_item.dart';
 import 'package:evently/Model/model.dart';
-import 'package:evently/Routmanager/routesmanager.dart';
 import 'package:evently/core/Icon.dart';
 import 'package:evently/core/assetsmanager.dart';
 import 'package:evently/core/colormanager.dart';
 import 'package:evently/firebase/firebaseinfo.dart';
 import 'package:evently/l10n/app_localizations.dart';
 import 'package:evently/providers/eventListProvider.dart';
+import 'package:evently/utils/tost_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -330,17 +330,16 @@ class _AddeventState extends State<Addevent> {
         titel: eventTitelController.text,
       );
 
-      FirebaseUtiles.addEventToFireStore(event).timeout(
-        Duration(seconds: 1),
-        onTimeout: () {
-          // ignore: avoid_print
-          print("add event");
-          //  eventListProvider.getAllEvents();
+      FirebaseUtiles.addEventToFireStore(event).then((_) {
+        ToastUtils.showToastMsg(
+          backgroundColor: Theme.of(context).dividerColor,
+          message: "Event Added successfully",
           // ignore: use_build_context_synchronously
-          //  Navigator.pop(context);
-          Navigator.of(context).pushReplacementNamed(RoutManager.homescreen);
-        },
-      );
+          textColor: Theme.of(context).disabledColor,
+        );
+        // ignore: use_build_context_synchronously
+        Navigator.pop(context);
+      });
     }
   }
 

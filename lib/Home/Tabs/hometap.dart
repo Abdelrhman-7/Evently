@@ -4,6 +4,7 @@ import 'package:evently/core/Icon.dart';
 import 'package:evently/core/colormanager.dart';
 import 'package:evently/l10n/app_localizations.dart';
 import 'package:evently/providers/eventListProvider.dart';
+import 'package:evently/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -28,6 +29,7 @@ class _HometapState extends State<Hometap> {
   @override
   Widget build(BuildContext context) {
     eventListProvider = Provider.of<Eventlistprovider>(context);
+    var userProvider = Provider.of<UserProvider>(context);
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     eventListProvider.getEventNameList(context);
@@ -50,9 +52,9 @@ class _HometapState extends State<Hometap> {
                   style: TextStyle(color: Colormanager.white, fontSize: 16),
                 ),
                 const SizedBox(height: 10),
-                const Text(
-                  "John Safwat",
-                  style: TextStyle(
+                Text(
+                  userProvider.currentUser!.name,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
                     fontSize: 28,

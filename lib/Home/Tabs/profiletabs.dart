@@ -6,7 +6,9 @@ import 'package:evently/core/Icon.dart';
 import 'package:evently/core/assetsmanager.dart';
 import 'package:evently/core/colormanager.dart';
 import 'package:evently/l10n/app_localizations.dart';
+import 'package:evently/providers/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Profiletabs extends StatefulWidget {
   const Profiletabs({super.key});
@@ -18,6 +20,7 @@ class Profiletabs extends StatefulWidget {
 class _ProfiletabsState extends State<Profiletabs> {
   @override
   Widget build(BuildContext context) {
+    var userProvider = Provider.of<UserProvider>(context);
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
@@ -35,7 +38,7 @@ class _ProfiletabsState extends State<Profiletabs> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    "John Safwat ",
+                    userProvider.currentUser!.name,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 24,
@@ -44,7 +47,7 @@ class _ProfiletabsState extends State<Profiletabs> {
                   ),
                   SizedBox(height: height * 0.001),
                   Text(
-                    "johnsafwat.route@gmail.com ",
+                    userProvider.currentUser!.email,
                     style: TextStyle(
                       fontWeight: FontWeight.w800,
                       fontSize: 16,
