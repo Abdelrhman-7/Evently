@@ -6,6 +6,7 @@ import 'package:evently/core/Icon.dart';
 import 'package:evently/core/assetsmanager.dart';
 import 'package:evently/firebase/firebaseinfo.dart';
 import 'package:evently/l10n/app_localizations.dart';
+import 'package:evently/providers/eventListProvider.dart';
 import 'package:evently/providers/user_provider.dart';
 import 'package:evently/utils/dialog_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -238,6 +239,14 @@ class Register extends StatelessWidget {
       await FirebaseUtiles.addUserFireStore(myUser);
       var userprovider = Provider.of<UserProvider>(context, listen: false);
       userprovider.updateUser(myUser);
+      var eventListprovider = Provider.of<Eventlistprovider>(
+        context,
+        listen: false,
+      );
+
+      if (userprovider.currentUser != null) {
+        eventListprovider.changeSelectedIndex(0, userprovider.currentUser!.id);
+      }
 
       if (!context.mounted) return;
       DialogUtils.hideLoding(context: context);
