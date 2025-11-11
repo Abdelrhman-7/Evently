@@ -1,0 +1,21 @@
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+class ToastUtils {
+  static void showToastMsg({
+    required String message,
+
+    required Color backgroundColor,
+    required Color textColor,
+  }) {
+    Fluttertoast.showToast(
+      msg: "Event Add Succsssfully",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: backgroundColor,
+      textColor: textColor,
+      fontSize: 16.0,
+    );
+  }
+}
