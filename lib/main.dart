@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+//import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evently/Apptheam/apptheam.dart';
 import 'package:evently/Home/AddEvent/addEvent.dart';
 import 'package:evently/Home/Tabs/widget/forgetPassword/forgetPassword.dart';
@@ -11,6 +11,7 @@ import 'package:evently/l10n/app_localizations.dart';
 import 'package:evently/providers/app_theme_provider.dart';
 import 'package:evently/providers/eventListProvider.dart';
 import 'package:evently/providers/provider_language.dart';
+import 'package:evently/providers/user_provider.dart';
 import 'package:evently/splashScreen.dart/splashscreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -19,13 +20,14 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await FirebaseFirestore.instance.disableNetwork(); //offline
+  //await FirebaseFirestore.instance.disableNetwork(); //offline
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => ProviderLanguage()),
         ChangeNotifierProvider(create: (_) => AppThemeProvider()),
         ChangeNotifierProvider(create: (_) => Eventlistprovider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
       child: const MyApp(),
     ),
@@ -50,7 +52,7 @@ class MyApp extends StatelessWidget {
         RoutManager.addevent: (context) => Addevent(),
         RoutManager.splashscreen: (context) => Splashscreen(),
       },
-      initialRoute: RoutManager.homescreen,
+      initialRoute: RoutManager.loginScreen,
       locale: Locale(languageProvider.appLanguage),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,

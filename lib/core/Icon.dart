@@ -12,6 +12,7 @@ class IconManager {
   // ignore: constant_identifier_names
   static const String User_01icon = "$_base/User_01.png";
   static const String favoriatsicon = "$_base/Heart.png";
+  static const String unselectedfavoriaticon = "$_base/favoriats.png";
   // ignore: constant_identifier_names
   static const String Map_Pinicon = "$_base/Map_Pin icon.png";
   static const String sun = "$_base/Sun.png";

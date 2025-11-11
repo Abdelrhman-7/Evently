@@ -1,10 +1,16 @@
 import 'package:evently/Buttones/customElevatedButton.dart';
 import 'package:evently/Custome_text_filed/text_filed.dart';
+import 'package:evently/Model/my_user_model.dart';
 import 'package:evently/Routmanager/routesmanager.dart';
 import 'package:evently/core/Icon.dart';
 import 'package:evently/core/assetsmanager.dart';
+import 'package:evently/firebase/firebaseinfo.dart';
 import 'package:evently/l10n/app_localizations.dart';
+import 'package:evently/providers/user_provider.dart';
+import 'package:evently/utils/dialog_utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class Register extends StatelessWidget {
@@ -12,7 +18,7 @@ class Register extends StatelessWidget {
   final formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passowrdController = TextEditingController();
-  TextEditingController name = TextEditingController();
+  TextEditingController nameController = TextEditingController();
   TextEditingController rePassowrdController = TextEditingController();
 
   @override
@@ -53,7 +59,7 @@ class Register extends StatelessWidget {
                           color: Theme.of(context).cardColor,
                         ),
 
-                        controller: name,
+                        controller: nameController,
                         styletext: TextStyle(
                           color: Theme.of(context).disabledColor,
                           fontSize: 16,
@@ -213,9 +219,76 @@ class Register extends StatelessWidget {
     );
   }
 
-  void register(BuildContext context) {
-    if (formKey.currentState?.validate() == true) {
-      Navigator.of(context).pushReplacementNamed(RoutManager.loginScreen);
+  void register(BuildContext context) async {
+    if (!formKey.currentState!.validate()) return;
+
+    DialogUtils.showLoading(context: context, message: "Creating New Account");
+
+    try {
+      final credential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+            email: emailController.text.trim(),
+            password: passowrdController.text.trim(),
+          );
+      MyUser myUser = MyUser(
+        email: emailController.text.trim(),
+        id: credential.user?.uid ?? '',
+        name: nameController.text,
+      );
+      await FirebaseUtiles.addUserFireStore(myUser);
+      var userprovider = Provider.of<UserProvider>(context, listen: false);
+      userprovider.updateUser(myUser);
+
+      if (!context.mounted) return;
+      DialogUtils.hideLoding(context: context);
+
+      if (credential.user != null) {
+        // لازم تستخدم await هنا علشان Flutter يستنى لما المستخدم يضغط OK
+        DialogUtils.showMasseg(
+          context: context,
+          message: "Account created successfully!",
+          titel: 'Success',
+          positiveAction: 'OK',
+          posveAction: () {
+            // اتأكد إن الـ context لسه mounted قبل التنقل
+            if (context.mounted) {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                RoutManager.homescreen,
+                (route) => false,
+              );
+            }
+          },
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      if (!context.mounted) return;
+      DialogUtils.hideLoding(context: context);
+
+      if (e.code == 'weak-password') {
+        DialogUtils.showMasseg(
+          context: context,
+          message: "The password provided is too weak.",
+          titel: 'Error',
+          positiveAction: 'OK',
+        );
+      } else if (e.code == 'email-already-in-use') {
+        DialogUtils.showMasseg(
+          context: context,
+          message: "The account already exists for that email.",
+          titel: 'Error',
+          positiveAction: 'OK',
+        );
+      }
+    } catch (e) {
+      if (!context.mounted) return;
+      DialogUtils.hideLoding(context: context);
+
+      DialogUtils.showMasseg(
+        context: context,
+        message: 'Something went wrong: $e',
+        titel: 'Error',
+        positiveAction: 'OK',
+      );
     }
   }
 }

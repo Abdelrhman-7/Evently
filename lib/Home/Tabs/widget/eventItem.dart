@@ -1,8 +1,12 @@
+// ignore_for_file: unrelated_type_equality_checks
+
 import 'package:evently/Model/model.dart';
 import 'package:evently/core/Icon.dart';
 import 'package:evently/core/colormanager.dart';
+import 'package:evently/providers/eventListProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class Eventitem extends StatelessWidget {
   final Event event;
@@ -12,7 +16,7 @@ class Eventitem extends StatelessWidget {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-
+    var eventlistprovider = Provider.of<Eventlistprovider>(context);
     return Container(
       height: height * 0.25,
 
@@ -89,9 +93,20 @@ class Eventitem extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Image.asset(
-                      IconManager.favoriatsicon,
-                      color: Theme.of(context).primaryColorDark,
+                    InkWell(
+                      onTap: () {
+                        event.isFavorite = !(event.isFavorite);
+                        eventlistprovider.updateIsFavoriteEvent(event);
+                      },
+                      child: event.isFavorite == true
+                          ? Image.asset(
+                              IconManager.favoriatsicon,
+                              color: Theme.of(context).primaryColorDark,
+                            )
+                          : Image.asset(
+                              IconManager.unselectedfavoriaticon,
+                              color: Theme.of(context).primaryColorDark,
+                            ),
                     ),
                   ],
                 ),

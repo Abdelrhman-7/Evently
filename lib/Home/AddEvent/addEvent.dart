@@ -9,6 +9,7 @@ import 'package:evently/core/colormanager.dart';
 import 'package:evently/firebase/firebaseinfo.dart';
 import 'package:evently/l10n/app_localizations.dart';
 import 'package:evently/providers/eventListProvider.dart';
+import 'package:evently/utils/tost_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -329,16 +330,16 @@ class _AddeventState extends State<Addevent> {
         titel: eventTitelController.text,
       );
 
-      FirebaseUtiles.addEventToFireStore(event).timeout(
-        Duration(seconds: 1),
-        onTimeout: () {
-          // ignore: avoid_print
-          print("add event");
-          //  eventListProvider.getAllEvents();
+      FirebaseUtiles.addEventToFireStore(event).then((_) {
+        ToastUtils.showToastMsg(
+          backgroundColor: Theme.of(context).dividerColor,
+          message: "Event Added successfully",
           // ignore: use_build_context_synchronously
-          Navigator.pop(context);
-        },
-      );
+          textColor: Theme.of(context).disabledColor,
+        );
+        // ignore: use_build_context_synchronously
+        Navigator.pop(context);
+      });
     }
   }
 

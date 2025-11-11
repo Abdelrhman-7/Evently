@@ -4,8 +4,13 @@ import 'package:evently/Routmanager/routesmanager.dart';
 import 'package:evently/core/Icon.dart';
 import 'package:evently/core/assetsmanager.dart';
 import 'package:evently/core/colormanager.dart';
+import 'package:evently/firebase/firebaseinfo.dart';
 import 'package:evently/l10n/app_localizations.dart';
+import 'package:evently/providers/user_provider.dart';
+import 'package:evently/utils/dialog_utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class Loginscreen extends StatelessWidget {
@@ -222,9 +227,65 @@ class Loginscreen extends StatelessWidget {
     );
   }
 
-  void login(BuildContext context) {
-    if (forKey.currentState?.validate() == true) {
-      Navigator.of(context).pushReplacementNamed(RoutManager.homescreen);
+  void login(BuildContext context) async {
+    if (!forKey.currentState!.validate()) return;
+
+    DialogUtils.showLoading(context: context, message: "Login...");
+
+    try {
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passowrdController.text.trim(),
+      );
+      if (!context.mounted) return;
+      DialogUtils.hideLoding(context: context);
+      if (credential.user != null) {
+        DialogUtils.showMasseg(
+          context: context,
+          message: "Login successfly",
+          titel: 'successfly',
+          positiveAction: 'OK',
+
+          posveAction: () {
+            Navigator.of(context).pushReplacementNamed(RoutManager.homescreen);
+          },
+        );
+      }
+      var user = await FirebaseUtiles.readUserFromeFireStore(
+        credential.user?.uid ?? '',
+      );
+      if (user == null) {
+        return;
+      }
+      // ignore: use_build_context_synchronously
+      var userprovider = Provider.of<UserProvider>(context, listen: false);
+      userprovider.updateUser(user);
+    } on FirebaseAuthException catch (e) {
+      if (!context.mounted) return;
+      DialogUtils.hideLoding(context: context);
+
+      if (e.code == 'user-not-found') {
+        DialogUtils.showMasseg(
+          context: context,
+          message: "No user found for that email.",
+          titel: 'Error',
+          positiveAction: 'OK',
+        );
+      } else if (e.code == 'wrong-password') {
+        DialogUtils.showMasseg(
+          context: context,
+          message: "Wrong password. Please try again.",
+          titel: 'Error',
+          positiveAction: 'OK',
+        );
+      } else {
+        DialogUtils.showMasseg(
+          context: context,
+          message: "Login failed: ${e.message}",
+          titel: 'Error',
+          positiveAction: 'OK',
+        );
+      }
     }
   }
 }

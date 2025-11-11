@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evently/Model/model.dart';
+import 'package:evently/Model/my_user_model.dart';
 
 class FirebaseUtiles {
   static Future<void> addEventToFireStore(Event event) {
@@ -30,8 +31,27 @@ class FirebaseUtiles {
         .collection(Event.collectionName)
         .withConverter<Event>(
           fromFirestore: (snapshot, options) =>
-              Event.formFirstStore(snapshot.data()!),
-          toFirestore: (event, options) => event.toFIreStore(),
+              Event.fromFirestore(snapshot.data()!),
+          toFirestore: (event, options) => event.toFirestore(),
         );
+  }
+
+  static CollectionReference<MyUser> getUserCollectionName() {
+    return FirebaseFirestore.instance
+        .collection(MyUser.collectionName)
+        .withConverter<MyUser>(
+          fromFirestore: (snapshot, options) =>
+              MyUser.fromFireStore(snapshot.data()!),
+          toFirestore: (event, options) => event.toFirestore(),
+        );
+  }
+
+  static Future<void> addUserFireStore(MyUser myUser) async {
+    await getUserCollectionName().doc(myUser.id).set(myUser);
+  }
+
+  static Future<MyUser?> readUserFromeFireStore(String id) async {
+    var querySnapshot = await getUserCollectionName().doc(id).get();
+    return querySnapshot.data();
   }
 }
