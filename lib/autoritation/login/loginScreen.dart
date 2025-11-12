@@ -6,6 +6,7 @@ import 'package:evently/core/assetsmanager.dart';
 import 'package:evently/core/colormanager.dart';
 import 'package:evently/firebase/firebaseinfo.dart';
 import 'package:evently/l10n/app_localizations.dart';
+import 'package:evently/providers/eventListProvider.dart';
 import 'package:evently/providers/user_provider.dart';
 import 'package:evently/utils/dialog_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -259,6 +260,15 @@ class Loginscreen extends StatelessWidget {
       }
       // ignore: use_build_context_synchronously
       var userprovider = Provider.of<UserProvider>(context, listen: false);
+      //todo: selected index =0=>call getallEvents every time login
+      var eventListprovider = Provider.of<Eventlistprovider>(
+        context,
+        listen: false,
+      );
+      if (userprovider.currentUser != null) {
+        eventListprovider.changeSelectedIndex(0, userprovider.currentUser!.id);
+        eventListprovider.getFilterEvents(userprovider.currentUser!.id);
+      }
       userprovider.updateUser(user);
     } on FirebaseAuthException catch (e) {
       if (!context.mounted) return;

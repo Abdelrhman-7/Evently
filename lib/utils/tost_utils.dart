@@ -9,7 +9,7 @@ class ToastUtils {
     required Color textColor,
   }) {
     Fluttertoast.showToast(
-      msg: "Event Add Succsssfully",
+      msg: message,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 1,

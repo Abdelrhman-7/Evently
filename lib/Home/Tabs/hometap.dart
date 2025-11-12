@@ -17,19 +17,20 @@ class Hometap extends StatefulWidget {
 
 class _HometapState extends State<Hometap> {
   late Eventlistprovider eventListProvider;
+  late UserProvider userProvider;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      eventListProvider.getAllEvents();
+      eventListProvider.getAllEvents(userProvider.currentUser!.id);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     eventListProvider = Provider.of<Eventlistprovider>(context);
-    var userProvider = Provider.of<UserProvider>(context);
+    userProvider = Provider.of<UserProvider>(context);
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     eventListProvider.getEventNameList(context);
@@ -119,7 +120,10 @@ class _HometapState extends State<Hometap> {
                     dividerColor: Colors.transparent,
                     isScrollable: true,
                     onTap: (index) {
-                      eventListProvider.changeSelectedIndex(index);
+                      eventListProvider.changeSelectedIndex(
+                        index,
+                        userProvider.currentUser!.id,
+                      );
                     },
                     tabs: eventListProvider.eventlyNameList
                         .asMap()

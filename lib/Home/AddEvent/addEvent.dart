@@ -9,6 +9,7 @@ import 'package:evently/core/colormanager.dart';
 import 'package:evently/firebase/firebaseinfo.dart';
 import 'package:evently/l10n/app_localizations.dart';
 import 'package:evently/providers/eventListProvider.dart';
+import 'package:evently/providers/user_provider.dart';
 import 'package:evently/utils/tost_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -321,6 +322,7 @@ class _AddeventState extends State<Addevent> {
 
   void addEvent() {
     if (formkey.currentState?.validate() == true) {
+      var userprovider = Provider.of<UserProvider>(context, listen: false);
       Event event = Event(
         description: eventDescriptionController.text,
         eventDateTime: selectedDate,
@@ -330,8 +332,12 @@ class _AddeventState extends State<Addevent> {
         titel: eventTitelController.text,
       );
 
-      FirebaseUtiles.addEventToFireStore(event).then((_) {
+      FirebaseUtiles.addEventToFireStore(
+        event,
+        userprovider.currentUser!.id,
+      ).then((_) {
         ToastUtils.showToastMsg(
+          // ignore: use_build_context_synchronously
           backgroundColor: Theme.of(context).dividerColor,
           message: "Event Added successfully",
           // ignore: use_build_context_synchronously
@@ -346,7 +352,9 @@ class _AddeventState extends State<Addevent> {
   @override
   void deactivate() {
     super.deactivate();
-    eventListProvider.getAllEvents();
+    var userprovider = Provider.of<UserProvider>(context, listen: false);
+
+    eventListProvider.getAllEvents(userprovider.currentUser!.id);
   }
 }
 //التعامل مع ال fututre function
