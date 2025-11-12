@@ -15,4 +15,9 @@ class ImageAssets {
   static final bookclub = "$base/book_club.png";
   static final splashlogo = "$base/Group 2.png";
   static final splash = "$base/Logo (1).png";
+  static final oncordingone = "$base/being-creative.png";
+  static final oncordingtow = "$base/hot-trending.png";
+  static final oncordingthree = "$base/being-creative (1).png";
+  static final oncordingfoure = "$base/being-creative (2).png";
+  static final onbordinglogo = "$base/Group 4.png";
 }

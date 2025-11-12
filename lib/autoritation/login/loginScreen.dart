@@ -14,6 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
+
+// ignore: must_be_immutable
 class Loginscreen extends StatelessWidget {
   Loginscreen({super.key});
   final forKey = GlobalKey<FormState>();
@@ -255,20 +257,24 @@ class Loginscreen extends StatelessWidget {
       var user = await FirebaseUtiles.readUserFromeFireStore(
         credential.user?.uid ?? '',
       );
+
+      if (!context.mounted) return;
+
       if (user == null) {
         return;
       }
-      // ignore: use_build_context_synchronously
+
       var userprovider = Provider.of<UserProvider>(context, listen: false);
-      //todo: selected index =0=>call getallEvents every time login
       var eventListprovider = Provider.of<Eventlistprovider>(
         context,
         listen: false,
       );
+
       if (userprovider.currentUser != null) {
         eventListprovider.changeSelectedIndex(0, userprovider.currentUser!.id);
         eventListprovider.getFilterEvents(userprovider.currentUser!.id);
       }
+
       userprovider.updateUser(user);
     } on FirebaseAuthException catch (e) {
       if (!context.mounted) return;
@@ -297,5 +303,37 @@ class Loginscreen extends StatelessWidget {
         );
       }
     }
+    /*
+    Future<void> signInWithGoogle(BuildContext context) async {
+      final GoogleSignIn?ogleSignIn = await 
+          GoogleSignIn.instance.authenticate(); // ✅ استخدم constructor الصحيح
+
+      try {
+        final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+
+        if (googleUser == null) {
+          // المستخدم لغى تسجيل الدخول
+          return;
+        }
+
+        final GoogleSignInAuthentication googleAuth =
+            await googleUser.authentication;
+
+        final credential = GoogleAuthProvider.credential(
+          idToken: googleAuth.idToken,
+        );
+
+        await FirebaseAuth.instance.signInWithCredential(credential);
+
+        if (!context.mounted) return;
+        Navigator.pushReplacementNamed(context, RoutManager.homescreen);
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('فشل تسجيل الدخول باستخدام Google: $e')),
+        );
+      }
+    }
+  }
+  */
   }
 }
