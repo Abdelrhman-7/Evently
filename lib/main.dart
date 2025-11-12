@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
         RoutManager.addevent: (context) => Addevent(),
         RoutManager.splashscreen: (context) => Splashscreen(),
       },
-      initialRoute: RoutManager.loginScreen,
+      initialRoute: RoutManager.splashscreen,
       locale: Locale(languageProvider.appLanguage),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,

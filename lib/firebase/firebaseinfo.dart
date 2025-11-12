@@ -3,9 +3,9 @@ import 'package:evently/Model/model.dart';
 import 'package:evently/Model/my_user_model.dart';
 
 class FirebaseUtiles {
-  static Future<void> addEventToFireStore(Event event) {
+  static Future<void> addEventToFireStore(Event event, String uId) {
     //1-creat collection
-    CollectionReference<Event> collection = getEventCollection();
+    CollectionReference<Event> collection = getEventCollection(uId);
     //2-creat decoment
     DocumentReference<Event> docRef = collection.doc();
     //3-assign auto doc id to event id
@@ -26,8 +26,9 @@ class FirebaseUtiles {
     */
   }
 
-  static CollectionReference<Event> getEventCollection() {
-    return FirebaseFirestore.instance
+  static CollectionReference<Event> getEventCollection(String uId) {
+    return getUserCollection()
+        .doc(uId)
         .collection(Event.collectionName)
         .withConverter<Event>(
           fromFirestore: (snapshot, options) =>
@@ -36,7 +37,7 @@ class FirebaseUtiles {
         );
   }
 
-  static CollectionReference<MyUser> getUserCollectionName() {
+  static CollectionReference<MyUser> getUserCollection() {
     return FirebaseFirestore.instance
         .collection(MyUser.collectionName)
         .withConverter<MyUser>(
@@ -47,11 +48,11 @@ class FirebaseUtiles {
   }
 
   static Future<void> addUserFireStore(MyUser myUser) async {
-    await getUserCollectionName().doc(myUser.id).set(myUser);
+    await getUserCollection().doc(myUser.id).set(myUser);
   }
 
   static Future<MyUser?> readUserFromeFireStore(String id) async {
-    var querySnapshot = await getUserCollectionName().doc(id).get();
+    var querySnapshot = await getUserCollection().doc(id).get();
     return querySnapshot.data();
   }
 }

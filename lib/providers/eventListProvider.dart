@@ -10,6 +10,8 @@ class Eventlistprovider extends ChangeNotifier {
   List<Event> eventList = [];
   List<Event> filterAllEvents = [];
   List<String> eventlyNameList = [];
+  List<Event> favoiteList = [];
+
   int selectedIndex = 0;
 
   List<String> getEventNameList(BuildContext context) {
@@ -27,9 +29,9 @@ class Eventlistprovider extends ChangeNotifier {
     ];
   }
 
-  void getAllEvents() async {
+  void getAllEvents(String uId) async {
     QuerySnapshot<Event> querySnapshot =
-        await FirebaseUtiles.getEventCollection().get();
+        await FirebaseUtiles.getEventCollection(uId).get();
     eventList = querySnapshot.docs.map((doc) {
       return doc.data();
     }).toList();
@@ -37,9 +39,9 @@ class Eventlistprovider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void getFilterEvents() async {
+  void getFilterEvents(String uId) async {
     QuerySnapshot<Event> querySnapshot =
-        await FirebaseUtiles.getEventCollection().get();
+        await FirebaseUtiles.getEventCollection(uId).get();
 
     eventList = querySnapshot.docs.map((doc) => doc.data()).toList();
 
@@ -50,19 +52,19 @@ class Eventlistprovider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeSelectedIndex(int newSelectedIndex) async {
+  void changeSelectedIndex(int newSelectedIndex, String uId) async {
     selectedIndex = newSelectedIndex;
     notifyListeners();
 
     if (selectedIndex == 0) {
-      getAllEvents();
+      getAllEvents(uId);
     } else {
-      getFilterEvents();
+      getFilterEvents(uId);
     }
   }
 
-  void updateIsFavoriteEvent(Event event) {
-    FirebaseUtiles.getEventCollection()
+  void updateIsFavoriteEvent(Event event, String uId) {
+    FirebaseUtiles.getEventCollection(uId)
         .doc(event.id)
         .update({'isFavorite': event.isFavorite})
         .then((_) {
@@ -87,7 +89,19 @@ class Eventlistprovider extends ChangeNotifier {
       eventList[index].isFavorite = event.isFavorite;
     }
 
-    selectedIndex == 0 ? getAllEvents() : getFilterEvents();
+    selectedIndex == 0 ? getAllEvents(uId) : getFilterEvents(uId);
+    notifyListeners();
+  }
+
+  void getAllFavoiriteEvents(String uId) async {
+    QuerySnapshot<Event> querySnapshot =
+        await FirebaseUtiles.getEventCollection(uId).get();
+    eventList = querySnapshot.docs.map((doc) {
+      return doc.data();
+    }).toList();
+    favoiteList = eventList.where((event) {
+      return event.isFavorite == true;
+    }).toList();
     notifyListeners();
   }
 }
