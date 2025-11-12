@@ -246,6 +246,7 @@ class Register extends StatelessWidget {
 
       if (userprovider.currentUser != null) {
         eventListprovider.changeSelectedIndex(0, userprovider.currentUser!.id);
+        eventListprovider.getFilterEvents(userprovider.currentUser!.id);
       }
 
       if (!context.mounted) return;

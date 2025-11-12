@@ -10,6 +10,8 @@ class Eventlistprovider extends ChangeNotifier {
   List<Event> eventList = [];
   List<Event> filterAllEvents = [];
   List<String> eventlyNameList = [];
+  List<Event> favoiteList = [];
+
   int selectedIndex = 0;
 
   List<String> getEventNameList(BuildContext context) {
@@ -88,6 +90,18 @@ class Eventlistprovider extends ChangeNotifier {
     }
 
     selectedIndex == 0 ? getAllEvents(uId) : getFilterEvents(uId);
+    notifyListeners();
+  }
+
+  void getAllFavoiriteEvents(String uId) async {
+    QuerySnapshot<Event> querySnapshot =
+        await FirebaseUtiles.getEventCollection(uId).get();
+    eventList = querySnapshot.docs.map((doc) {
+      return doc.data();
+    }).toList();
+    favoiteList = eventList.where((event) {
+      return event.isFavorite == true;
+    }).toList();
     notifyListeners();
   }
 }
