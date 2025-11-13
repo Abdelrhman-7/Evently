@@ -4,8 +4,8 @@ import 'package:evently/Home/Tabs/widget/forgetPassword/forgetPassword.dart';
 import 'package:evently/Home/home.dart';
 import 'package:evently/autoritation/login/loginScreen.dart';
 import 'package:evently/autoritation/login/redister/register.dart';
+import 'package:evently/on_bording/onbording.dart';
 import 'package:evently/splashScreen.dart/splashscreen.dart';
-
 import 'package:flutter/widgets.dart';
 
 class RoutManager {
@@ -16,13 +16,15 @@ class RoutManager {
   static const register = "/register";
   static const addevent = "/addevent";
   static const splashscreen = "/splashscreen";
+  static const onbording = "/onbording";
   static Map<String, WidgetBuilder> routes = {
     homescreen: (context) => Home(),
     profiltaps: (context) => Profiletabs(),
     loginScreen: (context) => Loginscreen(),
     register: (context) => Register(),
     addevent: (context) => Addevent(),
-    forgetPassword: (context) => const Forgetpassword(),
+    forgetPassword: (context) => Forgetpassword(),
     splashscreen: (context) => Splashscreen(),
+    onbording: (context) => OnboardingScreen(),
   };
 }
