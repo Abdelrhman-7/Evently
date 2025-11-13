@@ -240,6 +240,7 @@ class Register extends StatelessWidget {
       var userprovider = Provider.of<UserProvider>(context, listen: false);
       userprovider.updateUser(myUser);
       var eventListprovider = Provider.of<Eventlistprovider>(
+        // ignore: use_build_context_synchronously
         context,
         listen: false,
       );

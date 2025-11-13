@@ -22,6 +22,7 @@ class _FavoritstabState extends State<Favoritstab> {
   @override
   void initState() {
     super.initState();
+    // ignore: non_constant_identifier_names
     WidgetsBinding.instance.addPostFrameCallback((Timestamp) {
       eventlistprovider.getAllFavoiriteEvents(userProvider.currentUser!.id);
     });

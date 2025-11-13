@@ -16,7 +16,7 @@ class _SplashscreenState extends State<Splashscreen> {
   void initState() {
     super.initState();
     Timer(Duration(seconds: 3), () {
-      Navigator.of(context).pushReplacementNamed(RoutManager.loginScreen);
+      Navigator.of(context).pushReplacementNamed(RoutManager.onbording);
     });
   }
 

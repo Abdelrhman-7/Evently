@@ -8,6 +8,7 @@ import 'package:evently/autoritation/login/loginScreen.dart';
 import 'package:evently/autoritation/login/redister/register.dart';
 import 'package:evently/firebase_options.dart';
 import 'package:evently/l10n/app_localizations.dart';
+import 'package:evently/on_bording/onbording.dart';
 import 'package:evently/providers/app_theme_provider.dart';
 import 'package:evently/providers/eventListProvider.dart';
 import 'package:evently/providers/provider_language.dart';
@@ -51,6 +52,7 @@ class MyApp extends StatelessWidget {
         RoutManager.forgetPassword: (context) => Forgetpassword(),
         RoutManager.addevent: (context) => Addevent(),
         RoutManager.splashscreen: (context) => Splashscreen(),
+        RoutManager.onbording: (context) => OnboardingScreen(),
       },
       initialRoute: RoutManager.splashscreen,
       locale: Locale(languageProvider.appLanguage),
