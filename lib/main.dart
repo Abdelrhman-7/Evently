@@ -1,13 +1,17 @@
 //import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evently/Apptheam/apptheam.dart';
 import 'package:evently/Home/AddEvent/addEvent.dart';
+import 'package:evently/Home/Tabs/widget/event_details_screen.dart';
 import 'package:evently/Home/Tabs/widget/forgetPassword/forgetPassword.dart';
+import 'package:evently/Home/Tabs/widget/maps.dart';
 import 'package:evently/Home/home.dart';
+import 'package:evently/Model/model.dart';
 import 'package:evently/Routmanager/routesmanager.dart';
 import 'package:evently/autoritation/login/loginScreen.dart';
 import 'package:evently/autoritation/login/redister/register.dart';
 import 'package:evently/firebase_options.dart';
 import 'package:evently/l10n/app_localizations.dart';
+import 'package:evently/on_bording/onbording.dart';
 import 'package:evently/providers/app_theme_provider.dart';
 import 'package:evently/providers/eventListProvider.dart';
 import 'package:evently/providers/provider_language.dart';
@@ -51,6 +55,12 @@ class MyApp extends StatelessWidget {
         RoutManager.forgetPassword: (context) => Forgetpassword(),
         RoutManager.addevent: (context) => Addevent(),
         RoutManager.splashscreen: (context) => Splashscreen(),
+        RoutManager.onbording: (context) => OnboardingScreen(),
+        RoutManager.eventDetailsScreen: (context) {
+          Event event = ModalRoute.of(context)!.settings.arguments as Event;
+          return EventDetailsScreen(event: event);
+        },
+        RoutManager.maps: (context) => Maps(),
       },
       initialRoute: RoutManager.splashscreen,
       locale: Locale(languageProvider.appLanguage),

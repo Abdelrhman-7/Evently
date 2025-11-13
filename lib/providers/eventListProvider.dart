@@ -104,4 +104,30 @@ class Eventlistprovider extends ChangeNotifier {
     }).toList();
     notifyListeners();
   }
+
+  void updateEventInList(Event updatedEvent, String uId) async {
+    try {
+      // تحديث في Firestore
+      await FirebaseUtiles.updateEvent(updatedEvent, uId);
+
+      // تحديث داخل الليست المحلية
+      int index = eventList.indexWhere((event) => event.id == updatedEvent.id);
+      if (index != -1) {
+        eventList[index] = updatedEvent;
+      }
+
+      notifyListeners();
+    } catch (e) {
+      print("Error updating event: $e");
+    }
+  }
+
+  void deleteEventFromList(String eventId, String uId) async {
+    await FirebaseUtiles.deleteEvent(eventId, uId);
+
+    eventList.removeWhere((event) => event.id == eventId);
+    filterAllEvents.removeWhere((event) => event.id == eventId);
+
+    notifyListeners();
+  }
 }
