@@ -22,9 +22,16 @@ class _FavoritstabState extends State<Favoritstab> {
   @override
   void initState() {
     super.initState();
-    // ignore: non_constant_identifier_names
-    WidgetsBinding.instance.addPostFrameCallback((Timestamp) {
-      eventlistprovider.getAllFavoiriteEvents(userProvider.currentUser!.id);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final user = userProvider.currentUser;
+
+      if (user == null) {
+        print(" userProvider.currentUser is NULL in FavoriteTab");
+        return;
+      }
+
+      eventlistprovider.getAllFavoiriteEvents(user.id);
     });
   }
 

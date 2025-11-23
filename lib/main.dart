@@ -24,14 +24,16 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  //await FirebaseFirestore.instance.disableNetwork(); //offline
+
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => ProviderLanguage()),
         ChangeNotifierProvider(create: (_) => AppThemeProvider()),
         ChangeNotifierProvider(create: (_) => Eventlistprovider()),
-        ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(
+          create: (_) => UserProvider()..loadUser(),
+        ), // 👈 هنا
       ],
       child: const MyApp(),
     ),
@@ -69,7 +71,6 @@ class MyApp extends StatelessWidget {
       theme: AppTheam.lightTheme,
       darkTheme: AppTheam.darkTheme,
       themeMode: themeProvider.appTheme,
-      // home: const Home(),
     );
   }
 }

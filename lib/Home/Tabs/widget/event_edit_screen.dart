@@ -207,16 +207,14 @@ class _EditEventScreenState extends State<EditEventScreen> {
                   },
                 ),
                 SizedBox(height: height * 0.01),
-                // اختيار التاريخ
                 Timewidget(
-                  image: IconManager.calander,
+                  image: IconManager.calnderday,
                   text: AppLocalizations.of(context)!.eventDate,
                   chooseDateOrTime: selectedDate == null
                       ? AppLocalizations.of(context)!.chooseDate
                       : '${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}',
                   onChooseEventOrDate: chooseDate,
                 ),
-                // اختيار الوقت
                 Timewidget(
                   image: IconManager.clock,
                   text: AppLocalizations.of(context)!.eventTime,

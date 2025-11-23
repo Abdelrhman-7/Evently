@@ -29,4 +29,5 @@ class IconManager {
   static const String calander = "$_base/Frame 78.png";
   static const String clock = "$_base/Clock.png";
   static const String location = "$_base/location (1).png";
+  static const String calnderday = "$_base/Calendar_Days.png";
 }
