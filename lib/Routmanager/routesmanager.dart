@@ -1,6 +1,7 @@
 import 'package:evently/Home/AddEvent/addEvent.dart';
 import 'package:evently/Home/Tabs/profiletabs.dart';
 import 'package:evently/Home/Tabs/widget/forgetPassword/forgetPassword.dart';
+import 'package:evently/Home/Tabs/widget/maps.dart';
 import 'package:evently/Home/home.dart';
 import 'package:evently/autoritation/login/loginScreen.dart';
 import 'package:evently/autoritation/login/redister/register.dart';
@@ -17,6 +18,10 @@ class RoutManager {
   static const addevent = "/addevent";
   static const splashscreen = "/splashscreen";
   static const onbording = "/onbording";
+  static const editEventScreen = "/editEventScreen";
+  static const eventDetailsScreen = "/eventDetailsScreen";
+  static const maps = "/maps";
+
   static Map<String, WidgetBuilder> routes = {
     homescreen: (context) => Home(),
     profiltaps: (context) => Profiletabs(),
@@ -26,5 +31,6 @@ class RoutManager {
     forgetPassword: (context) => Forgetpassword(),
     splashscreen: (context) => Splashscreen(),
     onbording: (context) => OnboardingScreen(),
+    maps: (context) => Maps(),
   };
 }

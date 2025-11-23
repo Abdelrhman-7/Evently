@@ -55,4 +55,12 @@ class FirebaseUtiles {
     var querySnapshot = await getUserCollection().doc(id).get();
     return querySnapshot.data();
   }
+
+  static Future<void> deleteEvent(String eventId, String uId) async {
+    await getEventCollection(uId).doc(eventId).delete();
+  }
+
+  static Future<void> updateEvent(Event event, String uId) async {
+    await getEventCollection(uId).doc(event.id).update(event.toFirestore());
+  }
 }

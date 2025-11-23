@@ -21,7 +21,6 @@ class Register extends StatelessWidget {
   TextEditingController passowrdController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController rePassowrdController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -33,7 +32,6 @@ class Register extends StatelessWidget {
         foregroundColor: const Color(0xff5669FF),
         elevation: 0,
       ),
-
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: width * 0.02),

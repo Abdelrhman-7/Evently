@@ -26,7 +26,7 @@ class IconManager {
   static const String Exist = "$_base/Exit.png";
   static const String massege = "$_base/icon.png";
   static const String edit = "$_base/Vector.png";
-  static const String calander = "$_base/Vector1.png";
+  static const String calander = "$_base/Frame 78.png";
   static const String clock = "$_base/Clock.png";
-  static const String location = "$_base/Frame 78.png";
+  static const String location = "$_base/location (1).png";
 }
