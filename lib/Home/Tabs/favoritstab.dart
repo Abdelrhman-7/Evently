@@ -24,12 +24,23 @@ class _FavoritstabState extends State<Favoritstab> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      userProvider = Provider.of<UserProvider>(context, listen: false);
+      eventlistprovider = Provider.of<Eventlistprovider>(
+        context,
+        listen: false,
+      );
+
       final user = userProvider.currentUser;
 
       if (user == null) {
         print(" userProvider.currentUser is NULL in FavoriteTab");
         return;
       }
+
+      // اسمع أي تغيير يحصل في الفافوريت
+      eventlistprovider.addListener(() {
+        if (mounted) setState(() {});
+      });
 
       eventlistprovider.getAllFavoiriteEvents(user.id);
     });

@@ -108,7 +108,6 @@ class _EditEventScreenState extends State<EditEventScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // صورة الحدث
                 Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: width * 0.03,
@@ -122,7 +121,6 @@ class _EditEventScreenState extends State<EditEventScreen> {
                     child: Image.asset(selectedEventImage),
                   ),
                 ),
-                // اختيار نوع الحدث
                 DefaultTabController(
                   length: eventListName.length,
                   child: TabBar(
@@ -153,7 +151,6 @@ class _EditEventScreenState extends State<EditEventScreen> {
                         .toList(),
                   ),
                 ),
-                // العنوان
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: width * 0.04),
                   child: Text(
@@ -181,7 +178,6 @@ class _EditEventScreenState extends State<EditEventScreen> {
                     return null;
                   },
                 ),
-                // الوصف
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: width * 0.04),
                   child: Text(

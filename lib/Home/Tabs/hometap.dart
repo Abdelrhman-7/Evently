@@ -23,13 +23,16 @@ class _HometapState extends State<Hometap> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      userProvider = Provider.of<UserProvider>(context, listen: false);
+      eventListProvider = Provider.of<Eventlistprovider>(
+        context,
+        listen: false,
+      );
+
       final user = userProvider.currentUser;
+      if (user == null) return;
 
-      if (user == null) {
-        print("User is null in HomeTap");
-        return;
-      }
-
+      eventListProvider.getEventNameList(context); // مرة واحدة
       eventListProvider.getAllEvents(user.id);
     });
   }

@@ -1,6 +1,7 @@
 import 'package:evently/Home/Tabs/favoritstab.dart';
 import 'package:evently/Home/Tabs/hometap.dart';
 import 'package:evently/Home/Tabs/profiletabs.dart';
+import 'package:evently/Home/Tabs/widget/maps.dart';
 import 'package:evently/Routmanager/routesmanager.dart';
 import 'package:evently/core/Icon.dart';
 import 'package:evently/core/colormanager.dart';
@@ -19,7 +20,7 @@ class _HomeState extends State<Home> {
 
   final List<Widget> _pages = [
     Hometap(),
-    const Center(child: Text("Map Page")),
+    const Maps(),
     Favoritstab(),
     const Profiletabs(),
   ];
@@ -62,7 +63,6 @@ class _HomeState extends State<Home> {
               ),
               buildBottomNavigationBarItem(
                 index: 3,
-
                 selectedIndex: IconManager.User_01icon,
                 unSelectedIndex: IconManager.User_01,
                 label: AppLocalizations.of(context)!.profile,
