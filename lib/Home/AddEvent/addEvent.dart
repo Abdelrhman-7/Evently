@@ -209,7 +209,7 @@ class _AddeventState extends State<Addevent> {
                 ),
                 SizedBox(height: height * 0.01),
                 Timewidget(
-                  image: IconManager.calander,
+                  image: IconManager.calnderday,
                   text: AppLocalizations.of(context)!.eventDate,
                   chooseDateOrTime: selectedDate == null
                       ? AppLocalizations.of(context)!.chooseDate

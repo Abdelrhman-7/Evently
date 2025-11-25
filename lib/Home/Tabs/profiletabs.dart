@@ -23,6 +23,9 @@ class _ProfiletabsState extends State<Profiletabs> {
     var userProvider = Provider.of<UserProvider>(context);
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    if (userProvider.currentUser == null) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -48,10 +51,10 @@ class _ProfiletabsState extends State<Profiletabs> {
                   SizedBox(height: height * 0.001),
                   Text(
                     userProvider.currentUser!.email,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w800,
-                      fontSize: 16,
-                      color: Colormanager.whitepure,
+                    style: const TextStyle(
+                      color: Colormanager.white,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 18,
                     ),
                   ),
                 ],
@@ -68,10 +71,10 @@ class _ProfiletabsState extends State<Profiletabs> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Chooslanguage(),
+            const Chooslanguage(),
             SizedBox(height: height * 0.02),
-            Themechoose(),
-            Spacer(),
+            const Themechoose(),
+            const Spacer(),
             Customelevatedbutton(
               onpressed: () {
                 Navigator.of(

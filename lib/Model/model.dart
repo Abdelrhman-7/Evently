@@ -23,26 +23,27 @@ class Event {
     this.isFavorite = false,
   });
 
-  factory Event.fromFirestore(Map<String, dynamic> data) {
+  factory Event.fromFirestore(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>;
+
     return Event(
+      id: doc.id,
+      titel: data['titel'] ?? '',
       description: data['description'] ?? '',
+      eventImage: data['eventImage'] ?? '',
+      eventName: data['eventName'] ?? '',
       eventDateTime: data['eventDateTime'] != null
           ? (data['eventDateTime'] is Timestamp
                 ? (data['eventDateTime'] as Timestamp).toDate()
                 : DateTime.fromMillisecondsSinceEpoch(data['eventDateTime']))
-          : DateTime.now(),
-      eventImage: data['eventImage'] ?? '',
-      eventName: data['eventName'] ?? '',
+          : null,
       eventTime: data['eventTime'] ?? '',
-      titel: data['titel'] ?? '',
-      id: data['id'] ?? '',
       isFavorite: data['isFavorite'] ?? false,
     );
   }
 
   Map<String, dynamic> toFirestore() {
     return {
-      'id': id,
       'titel': titel,
       'description': description,
       'eventImage': eventImage,
@@ -52,7 +53,6 @@ class Event {
           : null,
       'eventTime': eventTime,
       'isFavorite': isFavorite,
-
     };
   }
 }
