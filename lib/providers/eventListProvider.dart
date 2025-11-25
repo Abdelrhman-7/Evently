@@ -118,6 +118,7 @@ class Eventlistprovider extends ChangeNotifier {
 
       notifyListeners();
     } catch (e) {
+      // ignore: avoid_print
       print("Error updating event: $e");
     }
   }

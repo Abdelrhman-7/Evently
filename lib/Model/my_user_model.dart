@@ -1,15 +1,25 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class MyUser {
   static const String collectionName = 'Users';
-  String name;
+
   String id;
+  String name;
   String email;
 
-  MyUser({required this.email, required this.id, required this.name});
+  MyUser({required this.id, required this.name, required this.email});
 
-  MyUser.fromFireStore(Map<String, dynamic> data)
-    : this(email: data['email'], id: data['id'], name: data['name']);
+  factory MyUser.fromFirestore(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>;
+
+    return MyUser(
+      id: doc.id, // 👈 أهم حاجة
+      name: data['name'] ?? '',
+      email: data['email'] ?? '',
+    );
+  }
 
   Map<String, dynamic> toFirestore() {
-    return {'id': id, 'name': name, 'email': email};
+    return {'name': name, 'email': email};
   }
 }

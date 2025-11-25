@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:evently/Buttones/customElevatedButton.dart';
 import 'package:evently/Custome_text_filed/text_filed.dart';
 import 'package:evently/Model/my_user_model.dart';
@@ -238,6 +240,7 @@ class Register extends StatelessWidget {
       var userprovider = Provider.of<UserProvider>(context, listen: false);
       userprovider.updateUser(myUser);
       var eventListprovider = Provider.of<Eventlistprovider>(
+        // ignore: duplicate_ignore
         // ignore: use_build_context_synchronously
         context,
         listen: false,

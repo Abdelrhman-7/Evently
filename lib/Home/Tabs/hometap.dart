@@ -23,7 +23,14 @@ class _HometapState extends State<Hometap> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      eventListProvider.getAllEvents(userProvider.currentUser!.id);
+      final user = userProvider.currentUser;
+
+      if (user == null) {
+        print("User is null in HomeTap");
+        return;
+      }
+
+      eventListProvider.getAllEvents(user.id);
     });
   }
 
@@ -47,20 +54,26 @@ class _HometapState extends State<Hometap> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 8),
-                Text(
-                  AppLocalizations.of(context)!.welcomeBack,
-                  style: TextStyle(color: Colormanager.white, fontSize: 16),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  userProvider.currentUser!.name,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 28,
+                const Text(
+                  "Welcome Back ✨",
+                  style: TextStyle(
+                    color: Colormanager.white,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
                   ),
                 ),
+                userProvider.currentUser == null
+                    ? const Center(
+                        child: CircularProgressIndicator(color: Colors.white),
+                      )
+                    : Text(
+                        userProvider.currentUser!.name,
+                        style: const TextStyle(
+                          color: Colormanager.white,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 24,
+                        ),
+                      ),
               ],
             ),
             const Spacer(),

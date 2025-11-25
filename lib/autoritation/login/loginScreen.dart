@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:evently/Buttones/customElevatedButton.dart';
 import 'package:evently/Custome_text_filed/text_filed.dart';
+import 'package:evently/Model/my_user_model.dart';
 import 'package:evently/Routmanager/routesmanager.dart';
 import 'package:evently/core/Icon.dart';
 import 'package:evently/core/assetsmanager.dart';
@@ -11,6 +14,7 @@ import 'package:evently/providers/user_provider.dart';
 import 'package:evently/utils/dialog_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
@@ -214,7 +218,17 @@ class Loginscreen extends StatelessWidget {
                         ),
                         text: AppLocalizations.of(context)!.loginWithGoogle,
                         Bordercolor: Theme.of(context).canvasColor,
-                        onpressed: () => login(context),
+                        onpressed: () async {
+                          final result = await signInWithGoogle();
+                          if (result != null) {
+                            Navigator.of(
+                              context,
+                            ).pushReplacementNamed(RoutManager.homescreen);
+                          } else {
+                            print("Google Sign-In cancelled or failed");
+                          }
+                        },
+
                         textcolor: Colormanager.whitepure,
                         hasIcon: true,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -228,6 +242,45 @@ class Loginscreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<UserCredential?> signInWithGoogle() async {
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn.instance;
+      await googleSignIn.initialize(
+        serverClientId:
+            "780262578449-kvq8dn3nhj9hnlb803402or5buldbkgv.apps.googleusercontent.com",
+      );
+
+      final GoogleSignInAccount? googleUser = await googleSignIn.authenticate();
+      if (googleUser == null) return null; // مهم جدًا
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        idToken: googleAuth.idToken,
+      );
+
+      // Once signed in, return the UserCredential
+      UserCredential firebaseUser = await FirebaseAuth.instance
+          .signInWithCredential(credential);
+
+      MyUser user = MyUser(
+        id: firebaseUser.user?.uid ?? '',
+        email: firebaseUser.user?.email ?? "no email provided",
+        name: firebaseUser.user?.displayName ?? "no name provided",
+      );
+
+      await FirebaseUtiles.addUserFireStore(user);
+
+      return firebaseUser; // مهم ترجع الـ UserCredential
+    } catch (e) {
+      log(e.toString());
+      return null;
+    }
   }
 
   void login(BuildContext context) async {
@@ -254,7 +307,7 @@ class Loginscreen extends StatelessWidget {
           },
         );
       }
-      var user = await FirebaseUtiles.readUserFromeFireStore(
+      var user = await FirebaseUtiles.readUserFromFireStore(
         credential.user?.uid ?? '',
       );
 
@@ -303,37 +356,5 @@ class Loginscreen extends StatelessWidget {
         );
       }
     }
-    /*
-    Future<void> signInWithGoogle(BuildContext context) async {
-      final GoogleSignIn?ogleSignIn = await 
-          GoogleSignIn.instance.authenticate(); // ✅ استخدم constructor الصحيح
-
-      try {
-        final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-
-        if (googleUser == null) {
-          // المستخدم لغى تسجيل الدخول
-          return;
-        }
-
-        final GoogleSignInAuthentication googleAuth =
-            await googleUser.authentication;
-
-        final credential = GoogleAuthProvider.credential(
-          idToken: googleAuth.idToken,
-        );
-
-        await FirebaseAuth.instance.signInWithCredential(credential);
-
-        if (!context.mounted) return;
-        Navigator.pushReplacementNamed(context, RoutManager.homescreen);
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('فشل تسجيل الدخول باستخدام Google: $e')),
-        );
-      }
-    }
-  }
-  */
   }
 }

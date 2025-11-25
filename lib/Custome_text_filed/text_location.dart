@@ -22,6 +22,7 @@ class TextLocation extends StatelessWidget {
     var width = MediaQuery.of(context).size.width;
 
     return Container(
+      height: height * 0.08,
       decoration: BoxDecoration(
         color: Colors.transparent,
         border: Border.all(width: 2, color: Colormanager.blue),
